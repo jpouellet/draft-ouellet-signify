@@ -1,14 +1,21 @@
-draft-ouellet-signify-00.html:
+draft-ouellet-signify-00.rfc:
 
-.PRECIOUS: %.txt %.json
+.SECONDARY: %.txt %.html %.json
 
-%.html: %.txt %.json
-	./rfcmarkup "id-repository=file:///proc/self/cwd&doc=$<" > $@
+%.rfc: %.html %.json
 	touch $@
-	echo $<
+
+%.html: %.txt
+	./rfcmarkup "id-repository=file:///proc/self/cwd&doc=$<" > $@
 
 %.json: %.md
 	./md2json.sh < $< > $@
 
 %.txt: %.xml
 	xml2rfc --text $<
+
+
+.PHONY: clean
+
+clean:
+	rm -f *.txt *.html *.json *.rfc

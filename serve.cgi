@@ -15,10 +15,10 @@ clean() {
 }
 
 inject_script() {
-	awk 'BEGIN {
-		src = ARGV[1]
+	cat | awk 'BEGIN {
+		tag = "<script type=\"text/javascript\" src=\"" ARGV[1] "\"></script>"
 		delete ARGV[1]
-		tag = "<script type=\"text/javascript\" src=\"" src "\"></script>"
+		ARGC--
 	}
 	!x {
 		x = sub("</head>", tag "</head>")
@@ -39,13 +39,11 @@ else
 	doc=$default
 fi
 
-html=${doc}.html
-
-makeout=$(env -i PATH="$PATH" make "./$html" 2>&1)
+makeout=$(env -i PATH="$PATH" make "${doc}.rfc" 2>&1)
 if [ $? -eq 0 ]; then
 	echo 'Content-Type: text/html'
 	echo
-	inject_script reload.js < "./$html"
+	inject_script reload.js < "./${doc}.html"
 else
 	echo 'Status: 500 Internal Server Error'
 	echo 'Content-Type: text/html'

@@ -2,4 +2,4 @@
 
 echo 'Content-Type: text/plain'
 echo
-inotifywait -q -eclose_write --exclude '[^\.][^x][^m][^l]$' --format '%f' .
+inotifywait -q -e close_write --format '' .
