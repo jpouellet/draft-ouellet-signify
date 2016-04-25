@@ -9,7 +9,7 @@ produce() {
 		echo no comment >&2
 		exit 1
 	fi
-	jo \
+	jo -B \
 	  sel="$1" \
 	  txt="$(printf '%s' "$2" | pandoc -f markdown_github -t html5)"
 }
@@ -32,4 +32,4 @@ more() {
 	fi
 	more
 }
-more
+more | jo -B -a

@@ -14,16 +14,19 @@ clean() {
 	printf '%s' "$1" | tr -dc '[a-z0-9]-'
 }
 
-inject_script() {
-	cat | awk 'BEGIN {
-		tag = "<script type=\"text/javascript\" src=\"" ARGV[1] "\"></script>"
-		delete ARGV[1]
-		ARGC--
+inject_scripts() {
+	awk 'BEGIN {
+		for (i = 1; i < ARGC - 1; i++) {
+			topen = "<script type=\"text/javascript\" src=\"" ARGV[i] "\">"
+			tclose = "</script>\n"
+			tags = tags topen tclose
+			delete ARGV[i]
+		}
 	}
 	!x {
-		x = sub("</head>", tag "</head>")
+		x = sub("</head>", tags "</head>")
 	}
-	1' "$1" -
+	1' "$@" -
 }
 
 # safety belt
@@ -43,13 +46,13 @@ makeout=$(env -i PATH="$PATH" make "${doc}.rfc" 2>&1)
 if [ $? -eq 0 ]; then
 	echo 'Content-Type: text/html'
 	echo
-	inject_script reload.js < "./${doc}.html"
+	inject_scripts reload.js annotate.js < "./${doc}.html"
 else
 	echo 'Status: 500 Internal Server Error'
 	echo 'Content-Type: text/html'
 	echo
 	echo '<!DOCTYPE html><html><head><title>Error</title>'
-	echo '</head><body><pre>' | inject_script reload.js
+	echo '</head><body><pre>' | inject_scripts reload.js annotate.js
 	printf '%s' "$makeout"
 	echo '</pre></body></html>'
 fi

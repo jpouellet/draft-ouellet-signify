@@ -416,7 +416,8 @@ def markup():
         for key in fields.keys():
             attribs[key] = fields[key].value
 
-        script = os.environ.get("SCRIPT_NAME", sys.argv[0])
+        #script = os.environ.get("SCRIPT_NAME", sys.argv[0])
+        script = 'https://tools.ietf.org/rfcmarkup'
 
         if fields.has_key("info"):
             info = fields["info"].value
@@ -454,7 +455,7 @@ def markup():
 
         if fields.has_key("id-repository"):
             ids = fields["id-repository"].value
-            extra = extra + "id-repository=%s&amp;" % fields["id-repository"].value
+            #extra = extra + "id-repository=%s&amp;" % fields["id-repository"].value
 
         if fields.has_key("header"):
             args["header"] = fields["header"].value

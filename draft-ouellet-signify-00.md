@@ -1,24 +1,17 @@
--- .wat
-# test
+-- J-P\. Ouellet
+Foo
 
-foo
-bar
+-- Signify wire format
+hey
 
-## asdf
-
--- .foo
-- wat
-- blah
-
-# hey
-
-b `stuff` a
+-- Abstract
+asdf
 
 ```
 xxx
 ```
 
--- .asdf
+-- MAND
 asdf
 
 **lol**

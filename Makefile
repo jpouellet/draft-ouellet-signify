@@ -1,6 +1,6 @@
 draft-ouellet-signify-00.rfc:
 
-.SECONDARY: %.txt %.html %.json
+.SECONDARY:
 
 %.rfc: %.html %.json
 	touch $@
