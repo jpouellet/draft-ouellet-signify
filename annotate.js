@@ -19,7 +19,7 @@ function enclose(range) {
 	e.style.height = r.height+'px';
 	e.style.width = r.width+'px';
 
-	e.style.border = border+'px solid orange';
+	e.style.borderWidth = border+'px';
 
 	e.range = range.cloneRange();
 
@@ -73,7 +73,6 @@ RangeMaker.prototype.span = function(n) {
 
 		var li = that.nodes[i].text.length;
 		if (m > li) {
-			console.log('recursing: '+li+' > '+m);
 			return recurse(i+1, m-li);
 		}
 		return {node: that.nodes[i].node, offset: m + (that.nodes[i].offset || 0)};
@@ -87,17 +86,51 @@ RangeMaker.prototype.next = function(re) {
 	this.consume(match.index);
 	var end = this.span(match[0].length);
 	var r = new Range();
-	console.log({n: this.nodes[0].node, o:this.nodes[0].offset});
 	r.setStart(this.nodes[0].node, this.nodes[0].offset || 0);
 	r.setEnd(end.node, end.offset);
-	console.log(this.nodes[0].node);
-	console.log(this.nodes[0].offset || 0);
-	console.log(end.node);
-	console.log(end.offset);
 	return r;
 };
 
+function addCSS(text) {
+	var style = document.createElement('style');
+	style.type = 'text/css';
+	if (style.styleSheet)
+		style.styleSheet.cssText = text;
+	else
+		style.appendChild(document.createTextNode(text));
+	document.head.appendChild(style);
+}
+
 window.addEventListener('DOMContentLoaded', function() {
+	addCSS('\
+.box { \
+	position: absolute; \
+	border-color: orange; \
+	border-style: dashed; \
+} \
+.box.front { \
+	border-style: solid; \
+	border-color: #77f; \
+} \
+.note { \
+	display: none; \
+	position: absolute; \
+	left: 600px; \
+	list-style-type: none; \
+	padding: 0.5em; \
+	background: #ccf; \
+} \
+.note.front { \
+	display: block; \
+} \
+.note > p:first-child { \
+	margin-top: 0px; \
+} \
+.note > p:last-child { \
+	margin-bottom: 0px; \
+} \
+	');
+
 	var x = window.x = {};
 	window.doc = document.title.split(' ')[0];
 	function GET(url, cb) {
@@ -108,6 +141,33 @@ window.addEventListener('DOMContentLoaded', function() {
 		xhr.open('GET', url, true);
 		xhr.send();
 	}
+
+	function unbring() {
+		var fronts = document.querySelectorAll('.front');
+		Array.prototype.forEach.call(fronts, function(f) {
+			f.classList.remove('front');
+		});
+		//location.hash = '#'; //XXX causes page jumps :(
+	}
+	x.unbring = unbring;
+
+	function bring(box) {
+		var note = box.note;
+		unbring();
+		box.classList.add('front');
+		note.classList.add('front');
+		var id = note.id;
+		note.id = ''; // to avoid scrolling
+		location.hash = '#'+id;
+		note.id = id;
+	}
+	x.bring = bring;
+
+	function dobring(evt) {
+		x.evt = evt;
+		bring(evt.currentTarget);
+	}
+
 	GET('/'+doc+'.json', function(resp) {
 		x.adom_ul = document.createElement('ul');
 		x.adom_div = document.createElement('div');
@@ -115,29 +175,72 @@ window.addEventListener('DOMContentLoaded', function() {
 		try {
 			var rm = new RangeMaker(document.body);
 			(x.annotations = JSON.parse(x.json = resp)).forEach(function(a, n) {
-				var descrno = n+1;
-
+				// create
 				var box = enclose(rm.next(new RegExp(a.sel)));
+				var note = document.createElement('li');
+
+				// classes
+				note.className = 'note';
+				box.className = 'box';
+
+				// local
+				note.innerHTML = a.txt;
+				note.style.top = box.style.top;
+
+				// ids
+				box.id = 'box-'+(n+1);
+				note.id = 'note-'+(n+1);
+
+				// dom xrefs
+				box.note = note;
+				note.box = box;
+
+				// event
+				box.addEventListener('mouseover', dobring);
+
+				// add
 				x.adom_div.appendChild(box);
-
-				var e = document.createElement('li');
-				e.innerHTML = a.txt;
-				e.style.position = 'absolute';
-				e.style.top = box.style.top;
-				e.style.listStyleType = 'none';
-				e.style.left = '600px';
-				e.style.border = box.style.border;
-				e.style.display = 'none';
-				x.adom_ul.appendChild(e);
-
-				box.id = 'descr'+(n+1)+'-box';
-				e.id = 'descr'+(n+1)+'-info';
+				x.adom_ul.appendChild(note);
 			});
 		} catch (e) {
 			alert(e);
+			throw e;
 		}
 
 		document.body.appendChild(x.adom_ul);
 		document.body.appendChild(x.adom_div);
+
+		var active = (location.hash || '#').substr(1);
+		if (active.startsWith('note-')) {
+			var note = document.getElementById(active);
+			if (note) {
+				bring(note.box);
+			}
+		}
+	});
+
+	function reljmp(rel) {
+		var m = /^note-([0-9]+)$/.exec((location.hash || '#').substr(1));
+		var n = (m ? parseInt(m[1]) : 0) + rel;
+		var box = document.getElementById('box-'+n);
+		if (box)
+			bring(box);
+	}
+	x.reljmp = reljmp;
+
+	window.addEventListener('keydown', function(e) {
+		// support arrow keys, vim keys, & emacs keys
+		switch (e.code) {
+		case 'ArrowLeft':
+		case 'KeyK':
+		case 'KeyP':
+			reljmp(-1);
+			break;
+		case 'ArrowRight':
+		case 'KeyJ':
+		case 'KeyN':
+			reljmp(1);
+			break;
+		}
 	});
 });
