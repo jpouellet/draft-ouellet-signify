@@ -147,7 +147,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		Array.prototype.forEach.call(fronts, function(f) {
 			f.classList.remove('front');
 		});
-		//location.hash = '#'; //XXX causes page jumps :(
+		history.replaceState(null, document.title, location.pathname + location.search);
 	}
 	x.unbring = unbring;
 
@@ -156,10 +156,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		unbring();
 		box.classList.add('front');
 		note.classList.add('front');
-		var id = note.id;
-		note.id = ''; // to avoid scrolling
-		location.hash = '#'+id;
-		note.id = id;
+		history.replaceState(null, document.title, location.pathname + location.search + '#'+note.id);
 	}
 	x.bring = bring;
 
@@ -225,6 +222,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		var box = document.getElementById('box-'+n);
 		if (box)
 			bring(box);
+		else if (rel < 0)
+			unbring();
 	}
 	x.reljmp = reljmp;
 
@@ -240,6 +239,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		case 'KeyJ':
 		case 'KeyN':
 			reljmp(1);
+			break;
+		case 'Escape':
+			unbring();
 			break;
 		}
 	});
