@@ -115,6 +115,7 @@ body { \
 .box.front { \
 	border-style: solid; \
 	border-color: red; \
+	z-index: 1; \
 } \
 .note { \
 	display: none; \
