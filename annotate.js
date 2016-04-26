@@ -217,6 +217,21 @@ window.addEventListener('DOMContentLoaded', function() {
 				bring(note.box);
 			}
 		}
+
+		// navigation hint
+		var hint = document.createElement('div');
+		var hintp = document.createElement('p');
+		hintp.textContent = 'Mouse over the highlighted sections or use the arrow keys to navigate annotations.';
+		hint.className = 'note';
+		hint.id = 'nav-hint';
+		hint.style.top = '30px';
+		hint.style.position = 'fixed';
+		hint.appendChild(hintp);
+		document.body.appendChild(hint);
+
+		// show nav hint?
+		if ((location.hash || '#').substr(1) === '')
+			hint.classList.add('front');
 	});
 
 	function reljmp(rel) {
