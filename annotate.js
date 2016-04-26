@@ -204,7 +204,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			});
 		} catch (e) {
 			alert(e);
-			throw e;
+			//throw e;
 		}
 
 		document.body.appendChild(x.adom_ul);
