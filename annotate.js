@@ -176,7 +176,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			var rm = new RangeMaker(document.body);
 			(x.annotations = JSON.parse(x.json = resp)).forEach(function(a, n) {
 				// create
-				var box = enclose(rm.next(new RegExp(a.sel)));
+				var box = enclose(rm.next(new RegExp(a.sel, 'm')));
 				var note = document.createElement('li');
 
 				// classes
