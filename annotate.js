@@ -105,20 +105,23 @@ window.addEventListener('DOMContentLoaded', function() {
 	addCSS('\
 .box { \
 	position: absolute; \
-	border-color: orange; \
-	border-style: dashed; \
+	border-color: #fc0; \
+	border-style: solid; \
+	border-radius: 3px; \
 } \
 .box.front { \
 	border-style: solid; \
-	border-color: #77f; \
+	border-color: red; \
 } \
 .note { \
 	display: none; \
 	position: absolute; \
 	left: 600px; \
 	list-style-type: none; \
-	padding: 0.5em; \
-	background: #ccf; \
+	padding: 1em; \
+	background: #cef; \
+	border-radius: 5px; \
+	margin-right: 30px; \
 } \
 .note.front { \
 	display: block; \
