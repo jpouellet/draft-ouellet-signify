@@ -6,7 +6,7 @@ draft-ouellet-signify-00.rfc:
 	touch $@
 
 %.html: %.txt
-	./rfcmarkup "id-repository=file:///proc/self/cwd&topmenu=true&doc=$<" > $@
+	./rfcmarkup "id-repository=file:///proc/self/cwd&topmenu=empty&doc=$<" > $@
 
 %.json: %.md
 	./md2json.sh < $< > $@
@@ -18,4 +18,4 @@ draft-ouellet-signify-00.rfc:
 .PHONY: clean
 
 clean:
-	rm -f *.txt *.html *.json *.rfc
+	rm -f *.txt *.html *.json *.rfc *~

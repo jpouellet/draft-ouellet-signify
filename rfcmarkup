@@ -356,6 +356,7 @@ def prelude(static=False):
 <pre>""" % args
 
 topmenu = """<span class="pre noprint docinfo top">[<a href="../html/" title="Document search and retrieval page">Docs</a>] [<a href="%(plaintext)s" title="Plaintext version of this document">txt</a>|<a href="/pdf/%(doc)s" title="PDF version of this document">pdf</a>%(htmllink)s]%(draft)s%(tracker)s%(wgmenu)s%(emailmenu)s%(diffmenu)s%(nitsmenu)s%(iprmenu)s%(erratamenu)s%(padding)s</span><br />"""
+topmenu_empty= """<span class="pre noprint docinfo top">%s</span><br />"""
 #wgmenu = """ [<a href="../wg/%(wg)s" title="The working group handling this
 #document">WG</a>] [<a href="../wg/%(wg)s/%(base)s" title="The WG docment page for this document">Doc Info</a>]"""
 wgmenu = """ [<a href="../wg/%(wg)s" title="The working group handling this document">WG</a>]"""
@@ -481,7 +482,7 @@ def markup():
 	    optstatic = False
 
         if fields.has_key("topmenu"):
-	    optmenu = fields["topmenu"].value == "true"
+	    optmenu = fields["topmenu"].value
             #extra = extra + "topmenu=%s&amp;" % fields["topmenu"].value
 	else:
 	    optmenu = False
@@ -1313,7 +1314,9 @@ def markup():
 
 	# output modified data
         prelude(optstatic)
-        if optmenu:
+	if optmenu == 'empty':
+            sys.stdout.write(topmenu_empty % (" "*72))
+        elif optmenu:
             if draftname:
                 args["draftname"] = draftname
                 args["nitsmenu"] = nitsmenu % args
