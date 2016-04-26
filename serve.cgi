@@ -15,6 +15,10 @@ clean() {
 }
 
 inject_scripts() {
+	if [ X"${PATH_INFO}" = X/noscript ]; then
+		cat
+		return
+	fi
 	awk 'BEGIN {
 		for (i = 1; i < ARGC - 1; i++) {
 			topen = "<script type=\"text/javascript\" src=\"" ARGV[i] "\">"
