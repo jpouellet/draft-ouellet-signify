@@ -9,6 +9,7 @@
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC2629 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml">
 <!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC4880 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4880.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -36,7 +37,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-ietf-xml2rfc-template-06" ipr="trust200902">
+<rfc category="std" docName="draft-ouellet-signify-00" ipr="trust200902">
  <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
@@ -50,7 +51,7 @@
         full title is longer than 39 characters -->
 
    <!--<title abbrev="Abbreviated Title">-->
-   <title>Signify wire format</title>
+   <title>Signify Digital Signature Format</title>
 
    <!-- add 'role="editor"' below for the editors if appropriate -->
 
@@ -59,31 +60,34 @@
    <author fullname="Jean-Philippe Ouellet" initials="J-P."
            surname="Ouellet">
      <!--<organization>Virginia Polytechnic Institute and State University</organization>-->
+     <organization>Independent</organization>
 
      <address>
        <postal>
+         <!--<street>10100 Blue Ridge Drive</street>-->
          <street></street>
 
          <!-- Reorder these if your country does things differently -->
 
-         <city>Soham</city>
+         <city>Blacksburg</city>
 
-         <region></region>
+         <region>VA</region>
 
-         <code></code>
+         <code>24060</code>
 
-         <country>UK</country>
+         <country></country>
        </postal>
 
-       <phone>+44 7889 488 335</phone>
+       <phone></phone>
 
-       <email>elwynd@dial.pipex.com</email>
+       <email>jpo@vt.edu</email>
 
        <!-- uri and facsimile elements may also be added -->
+       <!--<uri>http://jpo.me/</uri>-->
      </address>
    </author>
 
-   <date year="2016" />
+   <date year="2016" month="April" day="25 " />
 
    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
         in the current day for you. If only the current year is specified, xml2rfc will fill 
@@ -103,7 +107,7 @@
 	 If this element is not present, the default is "Network Working Group",
         which is used by the RFC Editor as a nod to the history of the IETF. -->
 
-   <keyword>template</keyword>
+   <keyword>signify</keyword>
 
    <!-- Keywords will be incorporated into HTML output
         files in a meta tag but they have no effect on text or nroff
@@ -111,15 +115,13 @@
         keywords will be used for the search engine. -->
 
    <abstract>
-     <t>Insert an abstract: MANDATORY. This template is for creating an
-     Internet Draft.</t>
+     <t>This document specifies the Signify format, designed initially for use in OpenBSD's minimalist digital signature utility by the same name.</t>
    </abstract>
  </front>
 
  <middle>
    <section title="Introduction">
-     <t>The original specification of xml2rfc format is in <xref
-     target="RFC2629">RFC&nbsp;2629</xref>.</t>
+     <t>The Signify format was originally created for the <xref target="SIGNIFY1">signify(1)</xref> utility in OpenBSD. The primary goal of the format is simplicity, such that an implementation of a signify-signature verification program could be as small as possible. This is in contrast to the OpenPGP format specified in <xref target="RFC4880">RFC 4880</xref> which tries to be general and extensible at the cost of complexity and attack surface of implementations. The format takes inspiration from the internal layout of structures from the NaCl cryptographic library <xref target="NACL"></xref>.</t>
 
      <section title="Requirements Language">
        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -316,8 +318,7 @@ main(int argc, char *argv[])
      <t>This template was derived from an initial version written by Pekka
      Savola and contributed by him to the xml2rfc project.</t>
 
-     <t>This document is part of a plan to make xml2rfc indispensable <xref
-     target="DOMINATION"></xref>.</t>
+     <t>This document is part of a plan to make xml2rfc indispensable.</t>
    </section>
 
    <!-- Possibly a 'Contributors' section ... -->
@@ -380,22 +381,33 @@ main(int argc, char *argv[])
 
      &RFC3552;
 
+     &RFC4880; <!-- OpenPGP -->
+
      &RFC5226;
 
      <!-- A reference written by by an organization not a person. -->
 
-     <reference anchor="DOMINATION"
-                target="http://www.example.com/dominator.html">
+     <reference anchor="SIGNIFY1" target="http://man.openbsd.org/OpenBSD-current/man1/signify.1">
        <front>
-         <title>Ultimate Plan for Taking Over the World</title>
-
+         <title>signify(1) &mdash; cryptographically sign and verify files</title>
          <author>
-           <organization>Mad Dominators, Inc.</organization>
+           <organization>Ted Unangst</organization><!--XXX not an org-->
          </author>
-
-         <date year="1984" />
+         <date year="2014" />
        </front>
      </reference>
+
+     <!-- XXX fixme -->
+     <reference anchor="NACL" target="http://man.openbsd.org/OpenBSD-current/man1/signify.1">
+       <front>
+         <title>signify(1) &mdash; cryptographically sign and verify files</title>
+         <author>
+           <organization>Ted Unangst</organization><!--XXX not an org-->
+         </author>
+         <date year="2014" />
+       </front>
+     </reference>
+
    </references>
 
    <section anchor="app-additional" title="Additional Stuff">
@@ -424,3 +436,4 @@ v06 2010-04-01 TT     Changed ipr attribute values to latest ones. Changed date 
                      IANA guidelines reference from the I-D to the finished RFC.  -->
  </back>
 </rfc>
+
