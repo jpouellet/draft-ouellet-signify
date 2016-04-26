@@ -6,7 +6,7 @@ draft-ouellet-signify-00.rfc:
 	touch $@
 
 %.html: %.txt
-	./rfcmarkup "id-repository=file:///proc/self/cwd&doc=$<" > $@
+	./rfcmarkup "id-repository=file:///proc/self/cwd&topmenu=true&doc=$<" > $@
 
 %.json: %.md
 	./md2json.sh < $< > $@
