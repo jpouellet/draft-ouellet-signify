@@ -103,6 +103,9 @@ function addCSS(text) {
 
 window.addEventListener('DOMContentLoaded', function() {
 	addCSS('\
+body { \
+	padding-left: 30px; \
+} \
 .box { \
 	position: absolute; \
 	border-color: #fc0; \
@@ -116,12 +119,13 @@ window.addEventListener('DOMContentLoaded', function() {
 .note { \
 	display: none; \
 	position: absolute; \
-	left: 600px; \
+	left: 630px; \
 	list-style-type: none; \
 	padding: 1em; \
 	background: #cef; \
 	border-radius: 5px; \
 	margin-right: 30px; \
+	max-width: 400px; \
 } \
 .note.front { \
 	display: block; \
