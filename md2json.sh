@@ -1,7 +1,8 @@
 #!/bin/sh
 
 markdown() {
-	pandoc -f markdown_github -t html
+	sed -E 's/RFC ([0-9]+)/[RFC \1](https:\/\/tools.ietf.org\/html\/rfc\1)/g' \
+	| pandoc -f markdown_github -t html
 }
 
 produce() {
