@@ -131,11 +131,14 @@ body { \
 .note.front { \
 	display: block; \
 } \
-.note > p:first-child { \
+.note > *:first-child { \
 	margin-top: 0px; \
 } \
-.note > p:last-child { \
+.note *:last-child { \
 	margin-bottom: 0px; \
+} \
+.note blockquote { \
+	margin-right: 0px; \
 } \
 	');
 
