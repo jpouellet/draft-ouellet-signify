@@ -44,25 +44,29 @@
 
  <middle>
    <section title="Introduction">
-     <t>The Signify format was originally created for the <xref target="SIGNIFY">signify utility</xref> in OpenBSD.
-     The primary goal of the format is simplicity, such that an implementation of a signify-signature verification program could be as small as possible.
-     This is unlike the OpenPGP format specified in <xref target="RFC4880">RFC 4880</xref> which tries to be general and extensible at the cost of complexity and corresponding attack surface of conforming implementations.</t>
+     <t>The Signify format was originally created for the <xref target="SIGNIFY">signify utility</xref> in OpenBSD to provide integrity and authenticity guarantees for messages and files.
+        The primary goal of the format is simplicity, such that an implementation of a signify-signature verification program could be as small as possible.
+        This is unlike the OpenPGP format specified in <xref target="RFC4880">RFC 4880</xref> which tries to be general and extensible at the cost of complexity and corresponding attack surface of conforming implementations.</t>
 
      <t>The format is inspired by the API of <xref target="NACL"></xref>, a library implementing all of the cryptographic primitives used herein.</t>
 
      <section title="Requirements Language">
        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-       document are to be interpreted as described in <xref
+          "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+          document are to be interpreted as described in <xref
        target="RFC2119">RFC 2119</xref>.</t>
      </section>
    </section>
 
    <section title="Data Formats">
      <t>There are three types of data formats: secret keys, public keys, and signatures.
-     The following sections describe their respective uses, structures, and fields.</t>
+        The following sections describe their respective uses, structures, and fields. Each data format MUST have all fields.</t>
+
+     <t>The binary structures SHOULD be stored in base64-encoded form according to <xref target="RFC4648">RFC 4648</xref>.</t>
 
      <section title="Secret Keys">
+
+       <t>Signify secret (signing) keys are 104-byte structures which SHALL be encoded according to the format specified by the following packet-header style diagram (with each horizontal notch representing a single bit of the data):</t>
 
 <figure><artwork><![CDATA[
                         1                   2                   3   
@@ -109,6 +113,8 @@
      </section>
      <section title="Public Keys">
 
+       <t>Signify public (verification) keys are 42-byte structures which SHALL be encoded as follows:</t>
+
 <figure><artwork><![CDATA[
                         1                   2                   3   
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
@@ -139,6 +145,8 @@
      </section>
      <section title="Signatures">
 
+       <t>Signify signatures are 74-byte structures which SHALL be encoded as follows:</t>
+
 <figure><artwork><![CDATA[
                         1                   2                   3   
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
@@ -168,7 +176,7 @@
        </list></t>
 
        <t>It is common to make signatures of hashes of documents instead of the documents themselves.
-       The original implementation used lists of <xref target="RFC6234">SHA-256</xref> signatures of files to be signed.</t>
+          The original implementation's most common use case was signing lists of <xref target="RFC6234">SHA-256</xref> hashes of files.</t>
 
      </section>
    </section>
