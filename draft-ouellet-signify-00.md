@@ -53,6 +53,16 @@ RFC 2223 (obsolete) says that even though each document shall have an abstract, 
 -- Status of This Memo
 This is a standard boilerplate section as specified by RFC 5741 ("RFC Streams, Headers, and Boilerplates").
 
+-- 78
+"Rights Contributors Provide to the IETF Trust"
+
+see note about `Copyright Notice` section below
+
+-- 79
+"Intellectual Property Rights in IETF Technology"
+
+see note about `Copyright Notice` section below
+
 -- Copyright Notice
 RFC 5378 ("Rights Contributors Provide to the IETF Trust") details all the intellectual property considerations of this section.
 
@@ -78,6 +88,25 @@ There is also RFC 6919 ("Further Key Words for Use in RFCs to Indicate Requireme
 which are much closer to how people actually treat the RFC 2119 keywords.
 
 Unfortunately RFC 6919 is in the "Experimental" category (not a standards-track document), and standards-track documents are not allowed to incorporate (through dependency of normative content) on documents of lesser statuses.
+
+-- IANA Considerations
+XXX RFC 5226
+XXX note from template about being required
+
+-- Security Considerations
+XXX write me
+
+XXX RFC 3552 says:
+
+Authors MUST describe
+
+      1.   which attacks are out of scope (and why!)
+      2.   which attacks are in-scope
+      2.1  and the protocol is susceptible to
+      2.2  and the protocol protects against
+
+At least the following forms of attack MUST be considered: eavesdropping, replay, message insertion, deletion, modification, and man-in-the-middle.  Potential denial of service attacks MUST be identified as well.  If the protocol incorporates cryptographic protection mechanisms, it should be clearly indicated which portions of the data are protected and what the protections are (i.e., integrity only, confidentiality, and/or endpoint authentication, etc.).  Some indication should also be given to what sorts of attacks the cryptographic protection is susceptible.  Data which should be held secret (keying material, random seeds, etc.) should be clearly labeled.
+
 
 -- Blacksburg.*24060
 It is suggested that you put a proper full mailing address, but I don't know what the scope of distribution of this document would be, and I'd prefer not to advertise my address everywhere.
