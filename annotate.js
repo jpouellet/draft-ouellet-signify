@@ -176,7 +176,7 @@ body { \
 		bring(evt.currentTarget);
 	}
 
-	GET('/'+doc+'.json', function(resp) {
+	GET(doc+'.json', function(resp) {
 		x.adom_ul = document.createElement('ul');
 		x.adom_div = document.createElement('div');
 
