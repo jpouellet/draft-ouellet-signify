@@ -47,7 +47,8 @@
      <t>The Signify format was originally created for the <xref target="SIGNIFY">signify utility</xref> in OpenBSD to provide integrity and authenticity guarantees for messages and files.
         The primary goal of the format is simplicity, such that an implementation of a signify-signature verification program could be as small as possible.</t>
 
-     <t>The functionality provided by the signify format is a subset of that provided by the OpenPGP format specified in <xref target="RFC4880">RFC 4880</xref>. The notable difference is that OpenPGP tries to be general and extensible at the cost of complexity and corresponding attack surface of conforming implementations, whereas signify tries to do one thing, do it well, and do it in the simplest manner possible.</t>
+     <t>The functionality provided by the signify format is a subset of that provided by the OpenPGP format specified in <xref target="RFC4880">RFC 4880</xref>.
+        The notable difference is that OpenPGP tries to be general and extensible at the cost of complexity and corresponding attack surface of conforming implementations, whereas signify tries to do one thing, do it well, and do it in the simplest manner possible.</t>
 
      <t>The format is inspired by the API of <xref target="NACL"></xref>, a library implementing all of the cryptographic primitives used herein.</t>
 
@@ -68,8 +69,11 @@
      <?rfc needLines="30"?>
      <section title="Secret Keys">
 
+       <t>Signify secret (signing) keys are 104-byte structures.
+          They contain a randomly generated secret key which SHOULD be secured by a passphrase.</t>
+
 <figure>
-<preamble>Signify secret (signing) keys are 104-byte structures which SHALL be encoded according to the format specified by the following packet-header style diagram (with each horizontal notch representing a single bit of the data):</preamble>
+<preamble>The data for secret keys SHALL be encoded according to the format specified by the following packet-header-style diagram (with each horizontal notch representing a single bit of the data):</preamble>
 <artwork><![CDATA[
                         1                   2                   3   
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
@@ -96,19 +100,33 @@
 
        <t>The fields are defined as follows:<list style="hanging">
          <t hangText="pkalg (2 bytes)"><vspace />
+           This field specifies what algorithm is used for the signing key.
+           This allows implementations to switch digital signature algorithms as advances in cryptography and cryptanalysis dictate.
+           <vspace blankLines="1" />
+           The only valid value currently specified is "Ed" (0x5A 0x64), specifying that <xref target="I-D.josefsson-eddsa-ed25519">Ed25519</xref> shall be used.
          </t>
          <t hangText="kdfalg (2 bytes)"><vspace />
+           This field denotes which key derivation function was used on the passphrase.
+           The result of this key derivation function MUST be a block of 64 bytes to be XORed with the secret key.
+           <vspace blankLines="1" />
+           The only valid value currently specified is "BK" (0x42 0x4B) to denote <xref target="BCRYPT">bcrypt</xref>.
          </t>
          <t hangText="kdfrounds (4 bytes)"><vspace />
+           This is a field of auxiliary information to be passed to the key derivation function.
+           In the case of bcrypt it specifies the number of rounds.
          </t>
          <t hangText="salt (16 bytes)"><vspace />
+           This is more auxiliary information for the key derivation function.
+           In the case of bcrypt it specifies the salt value.
          </t>
          <t hangText="checksum (8 bytes)"><vspace />
+           This is a checksum of the rest of the data.
          </t>
          <t hangText="keynum (8 bytes)"><vspace />
+           This is a value which should be unique for each key. It 
          </t>
          <t hangText="seckey (64 bytes)"><vspace />
-           is a blah <xref target="I-D.josefsson-eddsa-ed25519">Ed25519</xref>
+           This is the secret key, before being XORed with the result of the key derivation function.
          </t>
        </list></t>
 
@@ -138,10 +156,13 @@
 
        <t>The fields are defined as follows:<list style="hanging">
          <t hangText="pkalg (2 bytes)"><vspace />
+           This field is the same as in the secret key.
          </t>
          <t hangText="keynum (8 bytes)"><vspace />
+           This field is the same as in the secret key.
          </t>
          <t hangText="pubkey (32 bytes)"><vspace />
+           This field is the public key corresponding to the secret key.
          </t>
        </list></t>
 
@@ -171,11 +192,13 @@
 
        <t>The fields are defined as follows:<list style="hanging">
          <t hangText="pkalg (2 bytes)"><vspace />
+           This field is the same as in the secret key.
          </t>
          <t hangText="keynum (8 bytes)"><vspace />
+           This field is the same as in the secret key.
          </t>
          <t hangText="sig (64 bytes)"><vspace />
-           is a blah <xref target="I-D.josefsson-eddsa-ed25519">Ed25519</xref>
+           This is an <xref target="I-D.josefsson-eddsa-ed25519">Ed25519</xref> signature.
          </t>
        </list></t>
 
@@ -196,7 +219,7 @@
    </section>
 
    <section anchor="Security" title="Security Considerations">
-     <t>XXX TODO.</t>
+     <t>The secret key data must be adequately protected.</t>
    </section>
  </middle>
 
@@ -213,6 +236,20 @@
 
      <!-- EdDSA and Ed25519 -->
      <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.josefsson-eddsa-ed25519.xml"?>
+
+     <reference anchor="BCRYPT" target="https://www.usenix.org/legacy/event/usenix99/provos/provos.pdf">
+       <front>
+         <title>A Future-Adaptable Password Scheme</title>
+         <author initials="N." surname="Provos" fullname="Niels Provos">
+           <organization>The OpenBSD Project</organization>
+         </author>
+         <author initials="D." surname="Mazieres" fullname="David Mazieres">
+           <organization>The OpenBSD Project</organization>
+         </author>
+         <date year="1999" />
+       </front>
+     </reference>
+
    </references>
 
    <references title="Informative References">
@@ -223,7 +260,7 @@
        <front>
          <title>signify(1) &mdash; cryptographically sign and verify files</title>
          <author initials="T." surname="Unangst" fullname="Ted Unangst">
-           <organization>OpenBSD</organization>
+           <organization>The OpenBSD Project</organization>
          </author>
          <date year="2014" />
        </front>
@@ -242,9 +279,9 @@
    </references>
 
    <section title="Structures in C">
-     <t>Below is an example of how the structures defined in this document may be represented in C code.</t>
-
-<figure><artwork><![CDATA[
+<figure>
+<preamble>Below is an example of how the structures defined in this document may be represented in C code.</preamble>
+<artwork><![CDATA[
 /* Code begins. */
 struct enckey {
         uint8_t  pkalg[2];
